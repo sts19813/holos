@@ -1,4 +1,4 @@
-# Videre
+# Holos
 
 Sistema de gestión de pacientes y proveedores desarrollado en **Laravel 12** utilizando **Metronic 9 (Demo 2)** como framework UI.
 
