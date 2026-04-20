@@ -10,10 +10,27 @@
         max-height: 65vh;
         overflow-y: auto;
     }
+
+    #patientCreateModal .clinical-form-title {
+        color: #0f4fad;
+        font-weight: 800;
+        letter-spacing: .2px;
+        text-transform: uppercase;
+    }
+
+    #patientCreateModal .clinical-form-subtitle {
+        color: #0f4fad;
+        font-weight: 700;
+    }
+
+    #patientCreateModal .clinical-divider {
+        border-top: 2px solid #b7c9ea;
+        margin: .5rem 0 1rem;
+    }
 </style>
 
 <div class="modal fade" id="patientCreateModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
         <div class="modal-content">
 
             {{-- HEADER --}}
@@ -162,30 +179,6 @@
                     </div>
                         {{-- CLÍNICO DINÁMICO --}}
                         <div class="col-12" id="dynamicClinicalSection"></div>
-
-                        {{-- DATOS CLÍNICOS --}}
-                         <b class="mb-0">
-                            Datos clínicos
-                            <span class="text-muted">(opcional, si se cuenta con ellos)</span>
-                        </b>
-
-                        <div class="col-12">
-                            <label class="form-label">Refracción / graduación</label>
-                            <textarea name="refraction" class="form-control form-control-solid" rows="2">
-{{ old('refraction', $patient->refraction ?? '') }}</textarea>
-                        </div>
-
-                        <div class="col-12">
-                            <label class="form-label">Segmento anterior</label>
-                            <textarea name="anterior_segment_findings" class="form-control form-control-solid" rows="2">
-{{ old('anterior_segment_findings', $patient->anterior_segment_findings ?? '') }}</textarea>
-                        </div>
-
-                        <div class="col-12">
-                            <label class="form-label">Segmento posterior</label>
-                            <textarea name="posterior_segment_findings" class="form-control form-control-solid" rows="2">
-{{ old('posterior_segment_findings', $patient->posterior_segment_findings ?? '') }}</textarea>
-                        </div>
 
                         {{-- ARCHIVOS EXISTENTES --}}
                         @if($patient && $patient->files->count())

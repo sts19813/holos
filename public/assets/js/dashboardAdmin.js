@@ -815,10 +815,15 @@ $(document).on('click', '.btn-edit-patient', function () {
 
                 const value = data.clinical_data[key];
                 const field = form.find(`[name="clinical_data[${key}]"]`);
+                if (!field.length) return;
+                const fieldType = field.attr('type');
 
-                if (field.attr('type') === 'radio') {
+                if (fieldType === 'radio') {
                     form.find(`[name="clinical_data[${key}]"][value="${value}"]`)
                         .prop('checked', true);
+                } else if (fieldType === 'checkbox') {
+                    const checked = value === true || value === 1 || value === '1' || value === 'on' || value === 'si';
+                    field.prop('checked', checked);
                 } else {
                     field.val(value);
                 }
@@ -826,9 +831,6 @@ $(document).on('click', '.btn-edit-patient', function () {
             });
         }
 
-        form.find('[name="refraction"]').val(data.refraction);
-        form.find('[name="anterior_segment_findings"]').val(data.anterior_segment_findings);
-        form.find('[name="posterior_segment_findings"]').val(data.posterior_segment_findings);
         form.find('[name="observations"]').val(data.observations);
 
         // Limpiar Dropzone antes de cargar archivos
@@ -924,7 +926,7 @@ function resetPatientModal() {
     $('#patientModalTitle').text('Agregar paciente');
 
     // Limpiar sección dinámica
-    $('#dynamicClinicalSection').html('');
+    renderClinicalForm(form.find('[name="referral_type"]').val());
 
     // Reset array de archivos
     uploadedFiles = [];
