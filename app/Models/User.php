@@ -6,7 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Notifications\ResetPasswordVidere;
+use App\Notifications\ResetPasswordHolos;
 use Illuminate\Auth\Notifications\ResetPassword;
 
 
@@ -35,7 +35,7 @@ class User extends Authenticatable
 
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new ResetPasswordVidere($token));
+        $this->notify(new ResetPasswordHolos($token));
     }
 
 }

@@ -26,7 +26,7 @@ class ProviderWelcomeMail extends Mailable
     public function build()
     {
         return $this
-            ->subject('Bienvenido a Videre – Acceso como Afiliado')
+            ->subject('Bienvenido a Holos – Acceso como Afiliado')
             ->view('emails.provider-welcome');
     }
 }

@@ -1,7 +1,7 @@
 <div class="tab-pane fade" id="tab-users">
     <div class="card shadow-sm">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Usuarios Videre</h5>
+            <h5 class="mb-0">Usuarios Holos</h5>
             <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#userCreateModal">
                 <i class="ki-outline ki-plus me-1"></i> Agregar usuario
             </button>

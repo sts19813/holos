@@ -3,11 +3,11 @@
 
 <head>
     <base href="{{ asset('/') }}">
-    <title>@yield('title', 'Videre | Auth')</title>
+    <title>@yield('title', 'Holos | Auth')</title>
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Videre - Plataforma de gestión médica" />
+    <meta name="description" content="Holos - Plataforma de gestión médica" />
 
     {{-- Favicon --}}
     <link rel="shortcut icon" href="{{ asset('assets/media/logos/favicon.ico') }}" />
@@ -49,7 +49,7 @@
                 <div class="d-flex flex-center flex-lg-start flex-column">
                     <!--begin::Logo-->
                     <a href="index.html" class="mb-7">
-                        <img width="250px" alt="Logo" src='{{ asset("assets/img/Videre-Clinica-Logo.svg") }}'/>
+                        <img width="250px" alt="Logo" src='{{ asset("assets/img/Holos-Clinica-Logo.svg") }}'/>
                     </a>
                     <!--end::Logo-->
                     <!--begin::Title-->

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>@yield('title', 'Error') | Videre</title>
+    <title>@yield('title', 'Error') | Holos</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -97,7 +97,7 @@
     <div class="error-wrapper">
 
         <div class="error-header">
-            <img src="{{ asset('assets/img/videre-logo.png') }}" alt="Videre">
+            <img src="{{ asset('assets/img/holos-logo.png') }}" alt="Holos">
         </div>
 
         <div class="error-content">

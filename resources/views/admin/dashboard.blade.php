@@ -6,7 +6,7 @@
 
     {{-- HEADER --}}
     <div class="mb-4">
-        <h1 class="h4 fw-semibold text-dark mb-1">Portal Videre</h1>
+        <h1 class="h4 fw-semibold text-dark mb-1">Portal Holos</h1>
         <p class="text-muted mb-0">Panel de administración</p>
     </div>
 
@@ -90,13 +90,13 @@
 
         <li class="nav-item flex-fill">
             <button class="nav-link w-100 fw-semibold" data-bs-toggle="pill" data-bs-target="#tab-providers">
-                <i class="ki-outline ki-people me-2"></i> Afiliados videre
+                <i class="ki-outline ki-people me-2"></i> Afiliados holos
             </button>
         </li>
 
         <li class="nav-item flex-fill">
             <button class="nav-link w-100 fw-semibold" data-bs-toggle="pill" data-bs-target="#tab-users">
-                <i class="ki-outline ki-shield-user me-2"></i> Usuarios Videre
+                <i class="ki-outline ki-shield-user me-2"></i> Usuarios Holos
             </button>
         </li>
 

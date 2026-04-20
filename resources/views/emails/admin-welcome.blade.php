@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Bienvenido a Videre</title>
+    <title>Bienvenido a Holos</title>
 </head>
 
 <body style="font-family: Arial, sans-serif; background:#f5f5f5; padding:20px;">
@@ -12,16 +12,16 @@
 
         {{-- LOGO --}}
         <div style="text-align:center; margin-bottom:20px;">
-            <img src="{{ asset('assets/img/videre-logo.png') }}" alt="Videre" style="max-width:180px;">
+            <img src="{{ asset('assets/img/holos-logo.png') }}" alt="Holos" style="max-width:180px;">
         </div>
 
         
-        <h2 style="color:#1e1e2d;">Bienvenido a Videre</h2>
+        <h2 style="color:#1e1e2d;">Bienvenido a Holos</h2>
 
         <p>Hola <strong>{{ $user->name }}</strong>,</p>
 
         <p>
-            Se ha creado una cuenta de administrador para ti en el sistema <b>Videre</b>.
+            Se ha creado una cuenta de administrador para ti en el sistema <b>Holos</b>.
         </p>
 
         <p><strong>Credenciales de acceso:</strong></p>
@@ -49,7 +49,7 @@
         <hr>
 
         <p style="font-size:12px;color:#6c757d;">
-            © {{ date('Y') }} Videre. Todos los derechos reservados.
+            © {{ date('Y') }} Holos. Todos los derechos reservados.
         </p>
     </div>
 </body>

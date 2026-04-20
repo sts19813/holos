@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard | Videre')
+@section('title', 'Dashboard | Holos')
 
 @section('content')
 

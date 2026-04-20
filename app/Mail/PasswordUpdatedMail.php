@@ -21,7 +21,7 @@ class PasswordUpdatedMail extends Mailable
     public function build()
     {
         return $this
-            ->subject('Contraseña actualizada – Videre')
-            ->view('emails.password-updated-videre');
+            ->subject('Contraseña actualizada – Holos')
+            ->view('emails.password-updated-holos');
     }
 }

@@ -17,7 +17,7 @@
 
         {{-- Logo --}}
         <a href="/" class="navbar-brand d-flex align-items-center">
-            <img src="{{ asset('assets/img/Videre-Logo.svg') }}" alt="Videre" height="30">
+            <img src="{{ asset('assets/img/Holos-Logo.svg') }}" alt="Holos" height="30">
         </a>
 
         {{-- Right --}}

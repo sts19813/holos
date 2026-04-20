@@ -23,7 +23,7 @@ class AdminWelcomeMail extends Mailable
     public function build()
     {
         return $this
-            ->subject('Bienvenido a Videre – Acceso al sistema')
+            ->subject('Bienvenido a Holos – Acceso al sistema')
             ->view('emails.admin-welcome');
     }
 }

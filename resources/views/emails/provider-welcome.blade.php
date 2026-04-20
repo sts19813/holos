@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Bienvenido a Videre</title>
+    <title>Bienvenido a Holos</title>
 </head>
 
 <body style="font-family: Arial, sans-serif; background:#f5f5f5; padding:20px;">
@@ -11,17 +11,17 @@
 
         {{-- LOGO --}}
         <div style="text-align:center; margin-bottom:20px;">
-            <img src="{{ asset('assets/img/videre-logo.png') }}" alt="Videre" style="max-width:180px;">
+            <img src="{{ asset('assets/img/holos-logo.png') }}" alt="Holos" style="max-width:180px;">
         </div>
 
         <h2 style="color:#1e1e2d; text-align:center;">
-            Bienvenido a Videre
+            Bienvenido a Holos
         </h2>
 
         <p>Hola <strong>{{ $user->name }}</strong>,</p>
 
         <p>
-            Tu cuenta como <b>afiliado</b> ha sido creada correctamente en el sistema <b>Videre</b>.
+            Tu cuenta como <b>afiliado</b> ha sido creada correctamente en el sistema <b>Holos</b>.
         </p>
 
         <p><strong>Datos de tu cuenta:</strong></p>
@@ -39,7 +39,7 @@
         <p style="text-align:center;">
             <a href="{{ url('/login') }}"
                 style="display:inline-block;padding:12px 20px;background:#0d6efd;color:#ffffff;text-decoration:none;border-radius:4px;">
-                Acceder a Videre
+                Acceder a Holos
             </a>
         </p>
 
@@ -50,7 +50,7 @@
         <hr style="margin:30px 0;">
 
         <p style="font-size:12px;color:#6c757d; text-align:center;">
-            © {{ date('Y') }} Videre. Todos los derechos reservados.
+            © {{ date('Y') }} Holos. Todos los derechos reservados.
         </p>
 
     </div>

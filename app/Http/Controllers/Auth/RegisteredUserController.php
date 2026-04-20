@@ -54,7 +54,7 @@ class RegisteredUserController extends Controller
 
 
 
-    public function storeVidere(Request $request)
+    public function storeHolos(Request $request)
     {
         $request->validate([
             'provider_type' => 'required|in:optometrista,oftalmologo,medicos,otros',
@@ -98,7 +98,7 @@ class RegisteredUserController extends Controller
 
         } catch (\Throwable $e) {
 
-            Log::error('Error registro Videre', [
+            Log::error('Error registro Holos', [
                 'error' => $e->getMessage()
             ]);
 

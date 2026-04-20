@@ -2,7 +2,7 @@
 
 Sistema de gestión de pacientes y proveedores desarrollado en **Laravel 12** utilizando **Metronic 9 (Demo 2)** como framework UI.
 
-Videre está diseñado como una plataforma multi-rol donde un **Administrador** gestiona proveedores y pacientes, y los **Proveedores** registran pacientes que posteriormente son atendidos mediante citas agendadas por el administrador.
+Holos está diseñado como una plataforma multi-rol donde un **Administrador** gestiona proveedores y pacientes, y los **Proveedores** registran pacientes que posteriormente son atendidos mediante citas agendadas por el administrador.
 
 ---
 
@@ -52,7 +52,7 @@ Secciones principales:
 
 - Pacientes
 - Proveedores
-- Usuarios Videre
+- Usuarios Holos
 
 ---
 
@@ -233,7 +233,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 ```bash
 git clone <repositorio>
-cd videre
+cd holos
 composer install
 cp .env.example .env
 php artisan key:generate
@@ -275,4 +275,4 @@ Cualquier desarrollo futuro debe respetar:
 
 ---
 
-**Videre** — Sistema de Gestión de Pacientes y Proveedores
+**Holos** — Sistema de Gestión de Pacientes y Proveedores
