@@ -11,7 +11,7 @@
 
         {{-- LOGO --}}
         <div style="text-align:center; margin-bottom:20px;">
-            <img src="{{ asset('assets/img/holos-logo.png') }}" alt="Holos" style="max-width:180px;">
+            <img src="{{ asset('assets/img/Holos-logo.png') }}" alt="Holos" style="max-width:180px;">
         </div>
 
         <h2 style="color:#1e1e2d; text-align:center;">
