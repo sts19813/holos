@@ -30,45 +30,8 @@
                         </div>
                     </div>
 
-                    <div class="row g-5 mb-4">
-                        <div class="col-md-6 fv-row">
-                            <label class="form-label fw-semibold text-gray-700 mb-2">
-                                Selecciona una opción <span class="text-danger">*</span>
-                            </label>
-                            <select name="provider_type"
-                                class="form-select form-select-lg bg-transparent @error('provider_type') is-invalid @enderror"
-                                required>
-                                <option value="">Seleccionar</option>
-                                <option value="optometrista" @selected(old('provider_type') === 'optometrista')>
-                                    Optometrista
-                                </option>
-                                <option value="oftalmologo" @selected(old('provider_type') === 'oftalmologo')>
-                                    Oftalmólogo
-                                </option>
-                                <option value="medicos" @selected(old('provider_type') === 'medicos')>
-                                    Médicos
-                                </option>
-                                <option value="otros" @selected(old('provider_type') === 'otros')>
-                                    Otros
-                                </option>
-                            </select>
-                            @error('provider_type')
-                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-6 fv-row">
-                            <label class="form-label fw-semibold text-gray-700 mb-2">
-                                Empresa / Consultorio 
-                            </label>
-                            <input type="text" name="clinic_name" value="{{ old('clinic_name') }}"
-                                class="form-control form-control-lg bg-transparent @error('clinic_name') is-invalid @enderror"
-                                placeholder="Ej. Clínica Visión Norte" />
-                            @error('clinic_name')
-                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
+                    <input type="hidden" name="provider_type" value="medicos">
+                    <input type="hidden" name="clinic_name" value="">
 
                     <div class="row g-5 mb-10">
                         <div class="col-md-6 fv-row">
@@ -136,4 +99,3 @@
         </div>
     </div>
 @endsection
-

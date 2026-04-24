@@ -56,6 +56,11 @@ class RegisteredUserController extends Controller
 
     public function storeHolos(Request $request)
     {
+        $request->merge([
+            'provider_type' => 'medicos',
+            'clinic_name' => '',
+        ]);
+
         $request->validate([
             'provider_type' => 'required|in:optometrista,oftalmologo,medicos,otros',
             'first_name' => 'required|string|max:255',
