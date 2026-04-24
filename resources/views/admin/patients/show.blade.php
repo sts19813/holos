@@ -95,18 +95,10 @@
 
                                     <h5 class="fw-bold mb-4">Datos Clínicos</h5>
 
-                                    <div class="row g-4">
-                                        @foreach($patient->clinical_data as $key => $value)
-                                            <div class="col-md-4">
-                                                <label class="text-muted fw-semibold fs-7">
-                                                    {{ ucfirst(str_replace('_', ' ', $key)) }}
-                                                </label>
-                                                <div class="fw-bold fs-6">
-                                                    {{ $value ?: '—' }}
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
+                                    <x-patient-clinical-data
+                                        :referral-type="$patient->referral_type"
+                                        :clinical-data="$patient->clinical_data"
+                                    />
                                 @endif
 
                                 {{-- Evaluación clínica --}}
