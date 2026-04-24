@@ -87,11 +87,11 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label">Fecha de nacimiento *</label>
+                            <label class="form-label">Fecha de nacimiento </label>
                             <input type="date"
                                 name="birth_date"
                                 class="form-control"
-                                value="{{ old('birth_date', optional($patient->birth_date ?? null)->format('Y-m-d')) }}" required>
+                                value="{{ old('birth_date', optional($patient->birth_date ?? null)->format('Y-m-d')) }}">
                         </div>
 
                         {{-- ADMIN --}}
@@ -137,9 +137,11 @@
                         @php
                         $referralTypes = [
                             'consulta_general' => 'Consulta oftalmológica',
-                            'cirugia_refractiva' => 'Cirugía refractiva',
-                            'catarata_cristalino' => 'Catarata cristalino',
-                            'retina' => 'Retina'
+                            'oftalmogenetica' => 'Oftalmogenética',
+                            'neumologia' => 'Neumología',
+                            'genetica' => 'Genética',
+                            'endoscopia' => 'Endoscopía',
+                            'colonoscopia' => 'Colonoscopía'
                         ];
                         @endphp
 

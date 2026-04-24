@@ -4,6 +4,14 @@
             renderClinicalForm(this.value);
         });
 
+        $(document).on('mousedown', 'input[type="radio"][data-uncheckable="1"]', function () {
+            this.dataset.waschecked = this.checked ? '1' : '0';
+        });
+
+        $(document).on('click', 'input[type="radio"][data-uncheckable="1"]', function () {
+            if (this.dataset.waschecked === '1') this.checked = false;
+        });
+
         // Render inicial para que siempre aparezca el bloque dinámico
         renderClinicalForm($('#referralType').val());
     });
@@ -11,11 +19,19 @@
     function renderClinicalForm(type) {
         let html = '';
 
-        if (type === 'consulta_general') {
+        if (['consulta_general', 'oftalmogenetica'].includes(type)) {
+
+            const titles = {
+                consulta_general: 'Consulta Oftalmológica General',
+                oftalmogenetica: 'Consulta de Oftalmogenética',
+            };
+
+            const title = titles[type] || 'Consulta Oftalmológica';
+
             html = `
-                <div class="card border-primary-subtle p-4">
-                    <h6 class="clinical-form-title mb-1">Consulta Oftalmológica</h6>
-                    <div class="clinical-divider"></div>
+        <div class="card border-primary-subtle p-4">
+            <h6 class="clinical-form-title mb-1">${title}</h6>
+            <div class="clinical-divider"></div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Diagnóstico</label>
@@ -164,94 +180,167 @@
                 </div>`;
         }
 
-        if (type === 'cirugia_refractiva') {
+        const simpleClinicalCard = (title, fields) => `
+            <div class="card border-primary-subtle p-4">
+                <h6 class="clinical-form-title mb-1">${title}</h6>
+                <div class="clinical-divider"></div>
+                ${fields}
+            </div>`;
+
+        if (type === 'neumologia') {
             html = `
-                <div class="card border-primary p-4">
-                    <h6 class="fw-bold mb-3">Información específica - Cirugía refractiva</h6>
+                <div class="card border-primary-subtle p-4">
+                    <h6 class="clinical-form-title mb-1">Neumología</h6>
+                    <div class="clinical-divider"></div>
 
                     <div class="mb-3">
-                        <label class="form-label">¿Usa lentes de contacto?</label><br>
-                        <label><input type="radio" name="clinical_data[usa_lentes]" value="si"> Sí</label>
-                        <label class="ms-3"><input type="radio" name="clinical_data[usa_lentes]" value="no"> No</label>
+                        <label class="form-label fw-semibold">Diagnóstico</label>
+                        <input type="text" name="clinical_data[ne_diagnostico]" class="form-control">
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">¿Antecedentes familiares de queratocono?</label><br>
-                        <label><input type="radio" name="clinical_data[queratocono]" value="si"> Sí</label>
-                        <label class="ms-3"><input type="radio" name="clinical_data[queratocono]" value="no"> No</label>
+                    <div class="row g-3 mb-3">
+                        <div class="col-lg-6">
+                            <div class="clinical-form-subtitle mb-2">Espirometría Forzada</div>
+                            <div class="d-flex flex-wrap gap-3 mb-3">
+                                <label><input type="radio" name="clinical_data[ne_espirometria_forzada]" value="con_broncodilatador" data-uncheckable="1"> Con Broncodilatador</label>
+                                <label><input type="radio" name="clinical_data[ne_espirometria_forzada]" value="sin_broncodilatador" data-uncheckable="1"> Sin Broncodilatador</label>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <label><input type="checkbox" name="clinical_data[ne_titulacion_oxigeno]" value="1"> Titulación de Oxígeno</label>
+                                <label><input type="checkbox" name="clinical_data[ne_dlco]" value="1"> DLCO (Capacidad de Difusión de monóxido de carbono)</label>
+                                <label><input type="checkbox" name="clinical_data[ne_oscilometria]" value="1"> Oscilometría</label>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="clinical-form-subtitle mb-2">Caminata de 6 Minutos</div>
+                            <div class="d-flex flex-wrap gap-3 mb-3">
+                                <label><input type="radio" name="clinical_data[ne_caminata_6_min]" value="1_prueba" data-uncheckable="1"> 1 Prueba</label>
+                                <label><input type="radio" name="clinical_data[ne_caminata_6_min]" value="2_pruebas" data-uncheckable="1"> 2 Pruebas</label>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <label><input type="checkbox" name="clinical_data[ne_desaturacion_paulatina_oxigeno]" value="1"> Desaturación Paulatina de Oxígeno</label>
+                                <label><input type="checkbox" name="clinical_data[ne_reto_bronquial_ejercicio]" value="1"> Prueba de Reto Bronquial con Ejercicio</label>
+                                <label><input type="checkbox" name="clinical_data[ne_feno_nasal]" value="1"> FeNO Nasal</label>
+                                <label><input type="checkbox" name="clinical_data[ne_feno_bronquial]" value="1"> FeNO Bronquial</label>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">¿Embarazo o lactancia activa?</label><br>
-                        <label><input type="radio" name="clinical_data[embarazo]" value="si"> Sí</label>
-                        <label class="ms-3"><input type="radio" name="clinical_data[embarazo]" value="no"> No</label>
-                    </div>
+                    <h6 class="clinical-form-title mt-2 mb-2">Paquetes</h6>
+                    <div class="row g-3">
+                        <div class="col-lg-6 d-grid gap-2">
+                            <label>
+                                <input type="checkbox" name="clinical_data[ne_paquete_asma]" value="1"> Paquete Asma
+                                <ul class="mb-0 ps-3">
+                                    <li>Espirometría con Broncodilatador</li>
+                                    <li>FeNO Bronquial</li>
+                                </ul>
+                            </label>
+                            <label>
+                                <input type="checkbox" name="clinical_data[ne_paquete_asma_plus]" value="1"> Paquete Asma Plus
+                                <ul class="mb-0 ps-3">
+                                    <li>Espirometría con Broncodilatador</li>
+                                    <li>Oscilometría</li>
+                                    <li>FeNO Bronquial</li>
+                                </ul>
+                            </label>
+                            <label>
+                                <input type="checkbox" name="clinical_data[ne_paquete_asma_infantil]" value="1"> Paquete Asma Infantil
+                                <ul class="mb-0 ps-3">
+                                    <li>Prueba de Oscilometría Forzada</li>
+                                    <li>FeNO Bronquial</li>
+                                </ul>
+                            </label>
+                            <label>
+                                <input type="checkbox" name="clinical_data[ne_paquete_post_covid_fibrosis]" value="1"> Paquete Post Covid / Fibrosis Pulmonar
+                                <ul class="mb-0 ps-3">
+                                    <li>Espirometría sin Broncodilatador</li>
+                                    <li>DLCO</li>
+                                </ul>
+                            </label>
+                            <label>
+                                <input type="checkbox" name="clinical_data[ne_paquete_fibrosis_pulmonar_plus]" value="1"> Paquete Fibrosis Pulmonar Plus
+                                <ul class="mb-0 ps-3">
+                                    <li>Espirometría con Broncodilatador</li>
+                                    <li>DLCO</li>
+                                    <li>Prueba de Desaturación de Oxígeno</li>
+                                </ul>
+                            </label>
+                        </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">¿Uso de isotretinoína en los últimos 6 meses?</label><br>
-                        <label><input type="radio" name="clinical_data[isotretinoina]" value="si"> Sí</label>
-                        <label class="ms-3"><input type="radio" name="clinical_data[isotretinoina]" value="no"> No</label>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Padecimiento actual / síntomas</label>
-                        <textarea name="clinical_data[padecimiento_actual]" class="form-control" rows="3"></textarea>
+                        <div class="col-lg-6 d-grid gap-2">
+                            <label>
+                                <input type="checkbox" name="clinical_data[ne_paquete_rendimiento_fisico]" value="1"> Paquete Rendimiento Físico
+                                <ul class="mb-0 ps-3">
+                                    <li>Espirometría con Broncodilatador</li>
+                                    <li>Caminata 6 minutos (1 prueba)</li>
+                                </ul>
+                            </label>
+                            <label>
+                                <input type="checkbox" name="clinical_data[ne_paquete_epoc]" value="1"> Paquete EPOC
+                                <ul class="mb-0 ps-3">
+                                    <li>Espirometría con Broncodilatador</li>
+                                    <li>DLCO</li>
+                                </ul>
+                            </label>
+                            <label>
+                                <input type="checkbox" name="clinical_data[ne_paquete_epoc_inflamacion]" value="1"> Paquete EPOC Inflamación
+                                <ul class="mb-0 ps-3">
+                                    <li>Espirometría con Broncodilatador</li>
+                                    <li>DLCO</li>
+                                    <li>FeNO Bronquial</li>
+                                </ul>
+                            </label>
+                            <label>
+                                <input type="checkbox" name="clinical_data[ne_paquete_epoc_plus]" value="1"> Paquete EPOC Plus
+                                <ul class="mb-0 ps-3">
+                                    <li>Espirometría con Broncodilatador</li>
+                                    <li>DLCO</li>
+                                    <li>Prueba de Desaturación de Oxígeno</li>
+                                </ul>
+                            </label>
+                            <label>
+                                <input type="checkbox" name="clinical_data[ne_paquete_epoc_control]" value="1"> Paquete EPOC Control
+                                <ul class="mb-0 ps-3">
+                                    <li>Espirometría con Broncodilatador</li>
+                                    <li>DLCO</li>
+                                    <li>Caminata 6 minutos (1 prueba)</li>
+                                </ul>
+                            </label>
+                        </div>
                     </div>
                 </div>`;
         }
 
-        if (type === 'catarata_cristalino') {
-            html = `
-                <div class="card border-info p-4">
-                    <h6 class="fw-bold mb-3">Información específica - Catarata / Cristalino</h6>
-
-                    <div class="mb-3">
-                        <label class="form-label">¿Diabetes, hipertensión o glaucoma?</label><br>
-                        <label><input type="radio" name="clinical_data[enfermedades]" value="si"> Sí</label>
-                        <label class="ms-3"><input type="radio" name="clinical_data[enfermedades]" value="no"> No</label>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">¿Cirugías oculares previas?</label><br>
-                        <label><input type="radio" name="clinical_data[cirugias_previas]" value="si"> Sí</label>
-                        <label class="ms-3"><input type="radio" name="clinical_data[cirugias_previas]" value="no"> No</label>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Síntomas o padecimiento actual</label>
-                        <textarea name="clinical_data[sintomas]" class="form-control" rows="3"></textarea>
-                    </div>
-                </div>`;
+        if (type === 'genetica') {
+            html = simpleClinicalCard('Genética', `
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Consulta</label>
+                    <input type="text" name="clinical_data[ge_consulta]" class="form-control">
+                </div>
+                <div>
+                    <label class="form-label fw-semibold">Comentario</label>
+                    <textarea name="clinical_data[ge_comentario]" class="form-control" rows="3"></textarea>
+                </div>`);
         }
 
-        if (type === 'retina') {
-            html = `
-                <div class="card border-success p-4">
-                    <h6 class="fw-bold mb-3">Información específica - Retina</h6>
+        if (type === 'endoscopia') {
+            html = simpleClinicalCard('Endoscopía', `
+                <div>
+                    <label class="form-label fw-semibold">Comentario</label>
+                    <textarea name="clinical_data[en_comentario]" class="form-control" rows="3"></textarea>
+                </div>`);
+        }
 
-                    <div class="mb-3">
-                        <label class="form-label">¿Diabetes o hipertensión?</label><br>
-                        <label><input type="radio" name="clinical_data[diabetes_hipertension]" value="si"> Sí</label>
-                        <label class="ms-3"><input type="radio" name="clinical_data[diabetes_hipertension]" value="no"> No</label>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">¿Cirugías oculares previas?</label><br>
-                        <label><input type="radio" name="clinical_data[cirugias_previas]" value="si"> Sí</label>
-                        <label class="ms-3"><input type="radio" name="clinical_data[cirugias_previas]" value="no"> No</label>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">¿Traumatismo ocular reciente?</label><br>
-                        <label><input type="radio" name="clinical_data[traumatismo]" value="si"> Sí</label>
-                        <label class="ms-3"><input type="radio" name="clinical_data[traumatismo]" value="no"> No</label>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Síntomas o padecimiento actual</label>
-                        <textarea name="clinical_data[sintomas]" class="form-control" rows="3"></textarea>
-                    </div>
-                </div>`;
+        if (type === 'colonoscopia') {
+            html = simpleClinicalCard('Colonoscopía', `
+                <div>
+                    <label class="form-label fw-semibold">Comentario</label>
+                    <textarea name="clinical_data[col_comentario]" class="form-control" rows="3"></textarea>
+                </div>`);
         }
 
         $('#dynamicClinicalSection').html(html);

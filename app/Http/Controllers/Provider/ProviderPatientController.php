@@ -40,7 +40,7 @@ class ProviderPatientController extends Controller
             'referrer' => 'nullable|in:optometrista,oftalmologo,medico_general,otro',
             'birth_date' => 'nullable|date',
             // Tipo de referido
-            'referral_type' => 'required|in:consulta_general,cirugia_refractiva,catarata_cristalino,retina',
+            'referral_type' => 'required|in:consulta_general,oftalmogenetica,neumologia,genetica,endoscopia,colonoscopia',
 
             // Seguro
             'insurance' => 'nullable|in:axxa,allianz,gnp,metlife,atlas,inbursa,sura,ve_por_mas,seguros_monterrey,seguros_banorte,mapfre,zurich,otro',
@@ -103,7 +103,7 @@ class ProviderPatientController extends Controller
             'phone' => 'required|string|max:50',
             'birth_date' => 'nullable|date',
             'referrer' => 'nullable|in:optometrista,oftalmologo,medico_general,otro',
-            'referral_type' => 'nullable|in:consulta_general,cirugia_refractiva,catarata_cristalino,retina',
+            'referral_type' => 'nullable|in:consulta_general,oftalmogenetica,neumologia,genetica,endoscopia,colonoscopia',
 
             'insurance' => 'nullable|in:axxa,allianz,gnp,metlife,atlas,inbursa,sura,ve_por_mas,seguros_monterrey,seguros_banorte,mapfre,zurich,otro',
             'policy_date' => 'nullable|date',
