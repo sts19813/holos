@@ -97,7 +97,7 @@
     <div class="error-wrapper">
 
         <div class="error-header">
-            <img src="{{ asset('assets/img/holos-logo.png') }}" alt="Holos">
+            <img src="{{ asset('assets/img/HolosLogo.png') }}" alt="Holos">
         </div>
 
         <div class="error-content">
