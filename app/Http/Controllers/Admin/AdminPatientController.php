@@ -44,7 +44,7 @@ class AdminPatientController extends Controller
 
     public function attend(Request $request, Patient $patient)
     {
-        if ($patient->status !== 'cita_agendada') {
+        if ($patient->status != 'cita_agendada') {
             abort(403);
         }
 
@@ -68,7 +68,7 @@ class AdminPatientController extends Controller
 
     public function cancel(Patient $patient)
     {
-        if ($patient->status !== 'pendiente') {
+        if ($patient->status != 'pendiente') {
             abort(403);
         }
 
@@ -153,9 +153,9 @@ class AdminPatientController extends Controller
     public function proposeSurgery(Request $request, Patient $patient)
     {
         if (
-            $patient->status !== 'en_consulta' &&
-            $patient->status !== 'estudios_complementarios' &&
-            $patient->status !== 'propuesta_tratamiento'
+            $patient->status != 'en_consulta' &&
+            $patient->status != 'estudios_complementarios' &&
+            $patient->status != 'propuesta_tratamiento'
         ) {
             abort(403);
         }
@@ -176,7 +176,7 @@ class AdminPatientController extends Controller
 
     public function proposeTreatment(Request $request, Patient $patient)
     {
-        if ($patient->status !== 'en_consulta') {
+        if ($patient->status != 'en_consulta') {
             abort(403);
         }
 
@@ -196,7 +196,7 @@ class AdminPatientController extends Controller
 
     public function requestStudies(Request $request, Patient $patient)
     {
-        if ($patient->status !== 'en_consulta') {
+        if ($patient->status != 'en_consulta') {
             abort(403);
         }
 

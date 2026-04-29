@@ -18,7 +18,7 @@ class ProviderPatientController extends Controller
     public function edit(Patient $patient)
     {
         // seguridad: que solo pueda editar sus pacientes
-        if ($patient->provider_id !== auth()->user()->provider->id) {
+        if ($patient->provider_id != auth()->user()->provider->id) {
             abort(403);
         }
 
@@ -79,7 +79,7 @@ class ProviderPatientController extends Controller
     public function show(Patient $patient)
     {
         // Seguridad: validar que el paciente pertenece al provider
-        if ($patient->provider_id !== auth()->user()->provider->id) {
+        if ($patient->provider_id != auth()->user()->provider->id) {
             abort(403);
         }
 
@@ -92,7 +92,7 @@ class ProviderPatientController extends Controller
 
     public function update(Request $request, Patient $patient)
     {
-        if ($patient->provider_id !== auth()->user()->provider->id) {
+        if ($patient->provider_id != auth()->user()->provider->id) {
             abort(403);
         }
 

@@ -58,3 +58,7 @@ DATATABLES – ESTILO COMPACTO
     .dataTables_wrapper .dataTables_paginate {
         margin-top: 0.5rem;
     }
+
+    .text-primary{
+        color: black !important;
+    }
