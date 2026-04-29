@@ -184,12 +184,13 @@
 
                         {{-- ARCHIVOS EXISTENTES --}}
                         @if($patient && $patient->files->count())
-                            <div class="col-12">
+                            <div class="col-12" id="existingFilesContainer">
                                 <b>Archivos actuales</b>
                             </div>
 
                             @foreach($patient->files as $file)
-                                <div class="col-12 d-flex justify-content-between align-items-center border p-2 rounded">
+                                <div class="col-12 d-flex justify-content-between align-items-center border p-2 rounded existingFileItem"
+                                     data-file-id="{{ $file->id }}">
                                     <div>{{ $file->file_name }}</div>
                                     <div>
                                         <a href="{{ asset('storage/'.$file->file_path) }}"
@@ -206,6 +207,10 @@
                                     </div>
                                 </div>
                             @endforeach
+                        @else
+                            <div class="col-12" id="existingFilesContainer" style="display: none;">
+                                <b>Archivos actuales</b>
+                            </div>
                         @endif
 
                         {{-- DROPZONE --}}
@@ -213,7 +218,7 @@
                             <label class="form-label">Archivos del expediente</label>
                             <div class="dropzone" id="patientDropzone"></div>
                             <small class="text-muted">
-                                Máximo 5 archivos (5MB cada uno)
+                                Máximo 10 archivos (5MB cada uno)
                             </small>
                         </div>
                         {{-- OBSERVACIONES --}}

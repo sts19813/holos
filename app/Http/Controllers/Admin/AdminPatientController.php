@@ -14,7 +14,7 @@ class AdminPatientController extends Controller
     public function updateStatus(Request $request, Patient $patient)
     {
         $request->validate([
-            'status' => 'required|in:pendiente,cita_agendada,atendido,cancelado'
+            'status' => 'required|in:pendiente,esperando_confirmacion,sin_respuesta,cita_agendada,en_consulta,propuesta_cirugia,propuesta_tratamiento,estudios_complementarios,en_seguimiento,contrarreferencia,cancelado'
         ]);
 
         $patient->update([
@@ -26,7 +26,10 @@ class AdminPatientController extends Controller
 
     public function schedule(Request $request, Patient $patient)
     {
-
+        // Permitir agendar desde pendiente, esperando_confirmacion o sin_respuesta
+        if (!in_array($patient->status, ['pendiente', 'esperando_confirmacion', 'sin_respuesta'])) {
+            abort(403, 'No se puede agendar cita en este estado');
+        }
 
         $data = $request->validate([
             'appointment_date' => 'required|date',
@@ -68,8 +71,9 @@ class AdminPatientController extends Controller
 
     public function cancel(Patient $patient)
     {
-        if ($patient->status != 'pendiente') {
-            abort(403);
+        // Permitir cancelar desde pendiente, esperando_confirmacion o sin_respuesta
+        if (!in_array($patient->status, ['pendiente', 'esperando_confirmacion', 'sin_respuesta'])) {
+            abort(403, 'No se puede cancelar un paciente en este estado');
         }
 
         $patient->update([

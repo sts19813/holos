@@ -32,6 +32,8 @@
                                     @php
                                         $badges = [
                                             'pendiente' => 'badge-light-warning',
+                                            'esperando_confirmacion' => 'badge-light-info',
+                                            'sin_respuesta' => 'badge-light-danger',
                                             'cita_agendada' => 'badge-light-primary',
                                             'en_consulta' => 'badge-light-info',
                                             'propuesta_cirugia' => 'badge-light-danger',
@@ -44,6 +46,8 @@
 
                                         $labels = [
                                             'pendiente' => 'Pendiente',
+                                            'esperando_confirmacion' => 'Esperando confirmación',
+                                            'sin_respuesta' => 'Sin respuesta',
                                             'cita_agendada' => 'Cita agendada',
                                             'en_consulta' => 'En consulta',
                                             'propuesta_cirugia' => 'Cirugía propuesta',
@@ -93,6 +97,47 @@
                                             {{-- PENDIENTE --}}
                                             {{-- ========================= --}}
                                             @if($patient->status === 'pendiente')
+                                                <a class="dropdown-item btn-change-status" data-status="esperando_confirmacion">
+                                                    <i class="ki-outline ki-phone me-2"></i>
+                                                    Esperando confirmación
+                                                </a>
+
+                                                <a class="dropdown-item btn-change-status" data-status="sin_respuesta">
+                                                    <i class="ki-outline ki-eye-hide me-2"></i>
+                                                    Sin respuesta
+                                                </a>
+
+                                                <div class="dropdown-divider"></div>
+
+                                                <a class="dropdown-item btn-schedule-appointment">
+                                                    <i class="ki-outline ki-calendar me-2"></i>
+                                                    Agendar cita
+                                                </a>
+
+                                                <a class="dropdown-item text-danger btn-cancel-patient">
+                                                    <i class="ki-outline ki-cross me-2"></i>
+                                                    Cancelar
+                                                </a>
+                                            @endif
+
+                                            {{-- ========================= --}}
+                                            {{-- ESPERANDO CONFIRMACIÓN / SIN RESPUESTA --}}
+                                            {{-- ========================= --}}
+                                            @if(in_array($patient->status, ['esperando_confirmacion', 'sin_respuesta']))
+                                                @if($patient->status === 'esperando_confirmacion')
+                                                    <a class="dropdown-item btn-change-status" data-status="sin_respuesta">
+                                                        <i class="ki-outline ki-eye-hide me-2"></i>
+                                                        Marcar sin respuesta
+                                                    </a>
+                                                @else
+                                                    <a class="dropdown-item btn-change-status" data-status="esperando_confirmacion">
+                                                        <i class="ki-outline ki-phone me-2"></i>
+                                                        Volver a esperar
+                                                    </a>
+                                                @endif
+
+                                                <div class="dropdown-divider"></div>
+
                                                 <a class="dropdown-item btn-schedule-appointment">
                                                     <i class="ki-outline ki-calendar me-2"></i>
                                                     Agendar cita

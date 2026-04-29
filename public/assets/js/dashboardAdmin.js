@@ -8,6 +8,7 @@ Dropzone.autoDiscover = false;
 
 
 let uploadedFiles = [];
+let existingFiles = [];
 Dropzone.autoDiscover = false;
 
 
@@ -16,23 +17,39 @@ let myDropzone = new Dropzone("#patientDropzone", {
     autoProcessQueue: false,
     uploadMultiple: false,
     parallelUploads: 5,
-    maxFiles: 5,
+    maxFiles: 10,
     maxFilesize: 5,
     addRemoveLinks: true,
     acceptedFiles: ".jpg,.jpeg,.png,.pdf,.doc,.docx",
     dictDefaultMessage: "Arrastra los archivos aquí o haz clic para subirlos",
     dictRemoveFile: "Eliminar archivo",
-    dictMaxFilesExceeded: "Solo puedes subir 5 archivos",
+    dictMaxFilesExceeded: "Solo puedes subir 10 archivos máximo",
     dictFileTooBig: "El archivo es demasiado grande ({{filesize}}MB). Máx: {{maxFilesize}}MB",
     init: function () {
         this.on("addedfile", function (file) {
             if (!file.existing) {
                 uploadedFiles.push(file);
+            } else {
+                existingFiles.push(file);
             }
         });
 
         this.on("removedfile", function (file) {
-            uploadedFiles = uploadedFiles.filter(f => f !== file);
+            if (file.existing) {
+                existingFiles = existingFiles.filter(f => f !== file);
+                // Si se elimina un archivo existente, lo marcamos para eliminarlo en el servidor
+                if (file.fileId) {
+                    $.ajax({
+                        url: '/admin/patient-files/' + file.fileId,
+                        type: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                }
+            } else {
+                uploadedFiles = uploadedFiles.filter(f => f !== file);
+            }
         });
     }
 });
@@ -146,6 +163,43 @@ $(document).on('click', '.btn-cancel-patient', function () {
 $(document).on('click', '.btn-schedule-appointment', function () {
     const row = $(this).closest('tr');
     openAppointmentModal(row.data('id'));
+});
+
+/* =========================================================
+   PACIENTES – CAMBIAR ESTATUS
+========================================================= */
+$(document).on('click', '.btn-change-status', function () {
+    const row = $(this).closest('tr');
+    const patientId = row.data('id');
+    const newStatus = $(this).data('status');
+
+    const statusLabels = {
+        'esperando_confirmacion': 'Esperando confirmación',
+        'sin_respuesta': 'Sin respuesta',
+        'pendiente': 'Pendiente'
+    };
+
+    $.ajax({
+        url: `/admin/patients/${patientId}/status`,
+        method: 'PUT',
+        headers: {
+            'X-CSRF-TOKEN': document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute('content')
+        },
+        data: {
+            status: newStatus
+        },
+        success: function () {
+            toastr.success(`Estatus actualizado a: ${statusLabels[newStatus]}`);
+            localStorage.setItem('adminActiveTab', 'tab-patients');
+            location.reload();
+        },
+        error: function (xhr) {
+            toastr.error('Error al cambiar el estatus');
+            console.log(xhr.responseText);
+        }
+    });
 });
 
 $('#saveAppointment').on('click', function () {
@@ -833,31 +887,64 @@ $(document).on('click', '.btn-edit-patient', function () {
 
         form.find('[name="observations"]').val(data.observations);
 
+        // Actualizar archivos existentes en la UI
+        const existingFilesContainer = $('#existingFilesContainer');
+        if (data.files && data.files.length > 0) {
+            existingFilesContainer.show();
+            
+            // Limpiar archivos anteriores
+            existingFilesContainer.nextUntil('div:not(.existingFileItem)').remove();
+            
+            // Agregar archivos nuevos
+            data.files.forEach(file => {
+                const fileItem = `
+                    <div class="col-12 d-flex justify-content-between align-items-center border p-2 rounded existingFileItem" data-file-id="${file.id}">
+                        <div>${file.file_name}</div>
+                        <div>
+                            <a href="/storage/${file.file_path}" target="_blank" class="btn btn-sm btn-light-primary">
+                                Ver
+                            </a>
+                            <button type="button" class="btn btn-sm btn-light-danger btn-delete-file" data-id="${file.id}">
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                `;
+                existingFilesContainer.after(fileItem);
+            });
+        } else {
+            existingFilesContainer.hide();
+            $('.existingFileItem').remove();
+        }
+
         // Limpiar Dropzone antes de cargar archivos
         if (myDropzone) {
             myDropzone.removeAllFiles(true);
             uploadedFiles = [];
+            existingFiles = [];
 
-            if (data.files) {
+            if (data.files && data.files.length > 0) {
                 data.files.forEach(file => {
 
                     let mockFile = {
                         name: file.file_name,
                         size: file.file_size * 1024,
-                        existing: true
+                        existing: true,
+                        fileId: file.id
                     };
 
                     mockFile.accepted = true;
                     mockFile.status = Dropzone.SUCCESS;
 
                     myDropzone.emit("addedfile", mockFile);
-                    myDropzone.emit("thumbnail", mockFile, "/storage/" + file.file_path);
+                    
+                    // Verificar que la ruta sea correcta
+                    const filePath = file.file_path.startsWith('/storage/') ? file.file_path : '/storage/' + file.file_path;
+                    myDropzone.emit("thumbnail", mockFile, filePath);
                     myDropzone.emit("complete", mockFile);
 
                     // MUY IMPORTANTE:
                     myDropzone.files.push(mockFile);
-
-
 
                     mockFile.previewElement.classList.add("dz-success");
                     mockFile.previewElement.classList.add("dz-complete");
@@ -880,11 +967,18 @@ $(document).on('click', '.btn-delete-file', function () {
     $.ajax({
         url: '/admin/patient-files/' + id,
         type: 'DELETE',
-        data: {
-            _token: '{{ csrf_token() }}'
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: function () {
-            container.remove();
+            container.fadeOut(300, function() {
+                $(this).remove();
+            });
+            toastr.success('Archivo eliminado correctamente');
+        },
+        error: function(xhr) {
+            toastr.error('Error al eliminar el archivo');
+            console.log(xhr.responseText);
         }
     });
 });
