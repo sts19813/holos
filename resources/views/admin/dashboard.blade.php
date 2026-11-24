@@ -147,6 +147,7 @@
 
 @endsection
 @push('scripts')
-    <script src="/assets/js/dashboardAdmin.js"></script>
+    <script src="{{ asset('assets/js/patient-errors.js') }}?v={{ filemtime(public_path('assets/js/patient-errors.js')) }}"></script>
+    <script src="{{ asset('assets/js/dashboardAdmin.js') }}?v={{ filemtime(public_path('assets/js/dashboardAdmin.js')) }}"></script>
     @include('components.tipo-de-referido')
 @endpush

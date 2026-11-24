@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Redirect to the public folder, removing /public from the URL
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ /public/$1 [L]
+</IfModule>
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “ea-php83” package as the default “PHP” programming language.
+AddHandler application/x-httpd-php85 .php .php5 .php4 .php3

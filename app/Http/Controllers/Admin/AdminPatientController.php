@@ -123,6 +123,7 @@ class AdminPatientController extends Controller
             'posterior_segment_findings' => 'nullable|string',
 
 
+            'files' => 'nullable|array|max:10',
             'files.*' => 'nullable|file|max:5120|mimes:jpg,jpeg,png,pdf,doc,docx',
             // Observaciones generales
             'observations' => 'nullable|string',
@@ -268,6 +269,7 @@ class AdminPatientController extends Controller
             'anterior_segment_findings' => 'nullable|string',
             'posterior_segment_findings' => 'nullable|string',
 
+            'files' => 'nullable|array|max:10',
             'files.*' => 'nullable|file|max:5120|mimes:jpg,jpeg,png,pdf,doc,docx',
             'observations' => 'nullable|string',
         ]);

@@ -23,9 +23,11 @@ let myDropzone = new Dropzone("#patientDropzone", {
     acceptedFiles: ".jpg,.jpeg,.png,.pdf,.doc,.docx",
     dictDefaultMessage: "Arrastra los archivos aquí o haz clic para subirlos",
     dictRemoveFile: "Eliminar archivo",
-    dictMaxFilesExceeded: "Solo puedes subir 10 archivos máximo",
-    dictFileTooBig: "El archivo es demasiado grande ({{filesize}}MB). Máx: {{maxFilesize}}MB",
+    dictMaxFilesExceeded: "El límite máximo es de 10 archivos.",
+    dictFileTooBig: "El archivo supera el límite de 5 MB.",
+    dictInvalidFileType: "Formato no permitido. Usa JPG, PNG, PDF, DOC o DOCX.",
     init: function () {
+        this.on("error", function (file, message) { toastr.error(typeof message === "string" ? message : "No se pudo agregar el archivo."); });
         this.on("addedfile", function (file) {
             if (!file.existing) {
                 uploadedFiles.push(file);
@@ -261,21 +263,24 @@ $(document).on('click', '.btn-view-patient', function () {
 $(document).on('submit', '#patientForm', function (e) {
     e.preventDefault();
 
+    if (myDropzone.getRejectedFiles().length) {
+        toastr.error('Elimina los archivos marcados con error antes de guardar.');
+        return;
+    }
     let form = this;
     let formData = new FormData(form);
     let actionUrl = $(form).attr('action');
     let method = $(form).find('input[name="_method"]').val() || 'POST';
 
     if (myDropzone) {
-        uploadedFiles.forEach((file) => {
-            formData.append("files[]", file);
-        });
+        myDropzone.getAcceptedFiles().filter(file => !file.existing).forEach(file => formData.append("files[]", file));
     }
 
     $.ajax({
         url: actionUrl,
         method: method === 'PUT' ? 'POST' : method, // Laravel necesita POST + _method
         data: formData,
+        headers: { Accept: "application/json" },
         processData: false,
         contentType: false,
         success: function () {
@@ -297,14 +302,7 @@ $(document).on('submit', '#patientForm', function (e) {
             }, 400);
         },
         error: function (xhr) {
-
-            let msg = 'Error al guardar paciente';
-
-            if (xhr.responseJSON?.message) {
-                msg = xhr.responseJSON.message;
-            }
-
-            toastr.error(msg);
+            showPatientSaveError(xhr);
         }
     });
 });

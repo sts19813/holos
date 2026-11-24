@@ -48,13 +48,15 @@ class ProviderPatientController extends Controller
 
             // Información clínica dinámica
             'clinical_data' => 'nullable|array',
+            'files' => 'nullable|array|max:10',
+            'files.*' => 'nullable|file|max:5120|mimes:jpg,jpeg,png,pdf,doc,docx',
 
             // Observaciones generales
         ]);
 
 
 
-        Patient::create([
+        $patient = Patient::create([
             'provider_id' => auth()->user()->provider->id ?? 1, // temporal
             'first_name' => $validated['first_name'],
             'last_name' => $validated['last_name'],
@@ -69,6 +71,18 @@ class ProviderPatientController extends Controller
             'clinical_data' => $validated['clinical_data'] ?? [],
             'birth_date' => $validated['birth_date'],
         ]);
+
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $path = $file->store('patients/' . $patient->id, 'public');
+                $patient->files()->create([
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_path' => $path,
+                    'file_type' => $file->getClientMimeType(),
+                    'file_size' => round($file->getSize() / 1024),
+                ]);
+            }
+        }
 
         return response()->json([
             'success' => true,
@@ -114,6 +128,7 @@ class ProviderPatientController extends Controller
             'anterior_segment_findings' => 'nullable|string',
             'posterior_segment_findings' => 'nullable|string',
 
+            'files' => 'nullable|array|max:10',
             'files.*' => 'nullable|file|max:5120|mimes:jpg,jpeg,png,pdf,doc,docx',
 
             'observations' => 'nullable|string',

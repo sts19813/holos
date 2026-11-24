@@ -191,6 +191,7 @@
 
 @endsection
 @push('scripts')
+    <script src="{{ asset('assets/js/patient-errors.js') }}?v={{ filemtime(public_path('assets/js/patient-errors.js')) }}"></script>
     <script>
         let uploadedFiles = [];
         Dropzone.autoDiscover = false;
@@ -200,12 +201,18 @@
             autoProcessQueue: false,
             uploadMultiple: false,
             parallelUploads: 5,
-            maxFiles: 5,
+            maxFiles: 10,
             maxFilesize: 5,
             addRemoveLinks: true,
             acceptedFiles: ".jpg,.jpeg,.png,.pdf,.doc,.docx",
+            dictDefaultMessage: "Arrastra los archivos aquí o haz clic para subirlos",
+            dictRemoveFile: "Eliminar archivo",
+            dictMaxFilesExceeded: "El límite máximo es de 10 archivos.",
+            dictFileTooBig: "El archivo supera el límite de 5 MB.",
+            dictInvalidFileType: "Formato no permitido. Usa JPG, PNG, PDF, DOC o DOCX.",
 
             init: function () {
+                this.on("error", function (file, message) { toastr.error(typeof message === "string" ? message : "No se pudo agregar el archivo."); });
 
                 this.on("addedfile", function (file) {
                     if (!file.existing) {
@@ -247,13 +254,15 @@
 
             e.preventDefault();
 
+            if (myDropzone.getRejectedFiles().length) {
+                toastr.error('Elimina los archivos marcados con error antes de guardar.');
+                return;
+            }
             let form = this;
             let actionUrl = $(form).attr('action');
             let formData = new FormData(form);
 
-            uploadedFiles.forEach((file) => {
-                formData.append("files[]", file);
-            });
+            myDropzone.getAcceptedFiles().filter(file => !file.existing).forEach(file => formData.append("files[]", file));
 
             $.ajax({
                 url: actionUrl,
@@ -262,6 +271,7 @@
                 processData: false,
                 contentType: false,
                 headers: {
+                    'Accept': 'application/json',
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function () {
@@ -275,16 +285,7 @@
                     setTimeout(() => location.reload(), 400);
                 },
                 error: function (xhr) {
-
-                    if (xhr.status === 422) {
-
-                        Object.values(xhr.responseJSON.errors).forEach(messages => {
-                            messages.forEach(msg => toastr.error(msg));
-                        });
-
-                    } else {
-                        toastr.error('Error al guardar paciente');
-                    }
+                    showPatientSaveError(xhr);
                 }
             });
         });
